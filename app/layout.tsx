@@ -11,14 +11,17 @@ export const metadata: Metadata = {
   description:
     'Play Sudoku in 4×4, 6×6, 9×9, 12×12, 16×16 and 25×25, or paste in any puzzle and let the solver crack it instantly.',
   generator: 'v0.app',
-  icons: {
-    icon: [
-      { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
-      { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
-    ],
-    apple: '/apple-icon.png',
-  },
+ icons: {
+  icon: [
+    { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
+    { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
+    { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+    { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+
+    { url: '/icon.svg', type: 'image/svg+xml' },
+  ],
+  apple: '/apple-icon.png',
+},
 }
 
 export const viewport: Viewport = {
