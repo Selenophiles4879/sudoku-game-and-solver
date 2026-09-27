@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --color-ink: var(--ink);
+  --color-grid-strong: var(--grid-strong);
+  --color-cell-peer: var(--cell-peer);
+  --color-cell-same: var(--cell-same);
+  --color-cell-selected: var(--cell-selected);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+:root {
+  color-scheme: light;
+  --background: oklch(0.972 0.011 85);
+  --foreground: oklch(0.24 0.02 265);
+  --card: oklch(0.992 0.005 85);
+  --card-foreground: oklch(0.24 0.02 265);
+  --popover: oklch(0.992 0.005 85);
+  --popover-foreground: oklch(0.24 0.02 265);
+  --primary: oklch(0.57 0.15 38);
+  --primary-foreground: oklch(0.985 0.008 85);
+  --secondary: oklch(0.935 0.014 85);
+  --secondary-foreground: oklch(0.24 0.02 265);
+  --muted: oklch(0.945 0.012 85);
+  --muted-foreground: oklch(0.5 0.02 265);
+  --accent: oklch(0.925 0.03 70);
+  --accent-foreground: oklch(0.24 0.02 265);
+  --destructive: oklch(0.56 0.21 25);
+  --border: oklch(0.87 0.014 85);
+  --input: oklch(0.87 0.014 85);
+  --ring: oklch(0.57 0.15 38);
+  --radius: 0.625rem;
+
+  --ink: oklch(0.45 0.13 258);
+  --grid-strong: oklch(0.32 0.02 265);
+  --cell-peer: oklch(0.945 0.02 78);
+  --cell-same: oklch(0.89 0.05 60);
+  --cell-selected: oklch(0.84 0.08 50);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
