@@ -18,15 +18,6 @@ type BoardProps = {
   dimmed?: boolean
 }
 
-const MIN_WIDTH: Record<number, string> = {
-  4: 'min-w-0',
-  6: 'min-w-0',
-  9: 'min-w-0',
-  12: 'min-w-[420px]',
-  16: 'min-w-[520px]',
-  25: 'min-w-[680px]',
-}
-
 export function SudokuBoard({ cfg, values, kinds, notes, selected, conflicts, flagged, onSelect, dimmed }: BoardProps) {
   const { n } = cfg
   const selRow = selected !== null ? Math.floor(selected / n) : -1
@@ -38,15 +29,15 @@ export function SudokuBoard({ cfg, values, kinds, notes, selected, conflicts, fl
   const cells = useMemo(() => Array.from({ length: n * n }, (_, i) => i), [n])
 
   return (
-    <div className="w-full overflow-x-auto pb-1">
+    <div className="w-full overflow-visible pb-1">
       <div
         className={cn(
-          'mx-auto aspect-square w-full select-none overflow-hidden rounded-md border-2 border-grid-strong bg-card shadow-[0_1px_0_var(--border),0_12px_32px_-16px_oklch(0.3_0.03_60/0.35)] transition-opacity',
-          MIN_WIDTH[n],
+          'sudoku-board mx-auto aspect-square w-full max-w-full select-none overflow-hidden rounded-md border-2 border-grid-strong bg-card shadow-[0_1px_0_var(--border),0_12px_32px_-16px_oklch(0.3_0.03_60/0.35)] transition-opacity',
           dimmed && 'opacity-60',
         )}
         style={{
           containerType: 'inline-size',
+          width: `min(100%, calc(100dvh - ${n >= 25 ? 168 : n >= 16 ? 184 : n >= 12 ? 218 : 248}px))`,
           display: 'grid',
           gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))`,
           gridTemplateRows: `repeat(${n}, minmax(0, 1fr))`,
@@ -147,7 +138,7 @@ const Cell = memo(function Cell({
         borderRight: col === n - 1 ? 'none' : strongRight ? '2px solid var(--grid-strong)' : '1px solid var(--border)',
         borderBottom:
           row === n - 1 ? 'none' : strongBottom ? '2px solid var(--grid-strong)' : '1px solid var(--border)',
-        fontSize: `calc(100cqw / ${n} * ${n >= 16 ? 0.5 : 0.56})`,
+        fontSize: `calc(100cqw / ${n} * ${n >= 25 ? 0.58 : n >= 16 ? 0.56 : 0.56})`,
       }}
     >
       {value ? (
