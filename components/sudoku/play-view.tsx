@@ -8,7 +8,7 @@ import { useBoardKeyboard } from '@/hooks/use-board-keyboard'
 import { DIFFICULTIES, SIZES, findConflicts, getSizeConfig, type Difficulty } from '@/lib/sudoku/config'
 import { gameReducer, initialGameState } from '@/lib/sudoku/game-reducer'
 import { cn } from '@/lib/utils'
-import { NumberPad } from './number-pad'
+import { MobileKeyboardInput, NumberPad } from './number-pad'
 import { Segmented } from './segmented'
 import { StatusLine, type StatusMessage } from './status-line'
 import { SudokuBoard, type CellKind } from './sudoku-board'
@@ -338,6 +338,26 @@ export function PlayView() {
           )}
         </div>
         <StatusLine message={message} />
+        <div className="mobile-only-input" aria-label="Mobile input controls">
+          <div className="mobile-input-heading">
+            <span>Input</span>
+            {state.selected !== null && <span>Cell {state.selected + 1}</span>}
+          </div>
+          <div className="mobile-input-row">
+            <MobileKeyboardInput n={n} onInput={input} onErase={erase} disabled={!playing} />
+            <button
+              type="button"
+              aria-pressed={state.notesMode}
+              disabled={n > 9 || !playing}
+              onClick={() => dispatch({ type: 'toggleNotes' })}
+              title={n > 9 ? 'Notes are available up to 9×9' : 'Toggle notes'}
+              className={cn('mobile-notes-button', state.notesMode && 'mobile-notes-button-active')}
+            >
+              <PencilLine className="size-4" aria-hidden="true" />
+              Notes {state.notesMode ? 'on' : 'off'}
+            </button>
+          </div>
+        </div>
       </section>
 
       <aside className="flex flex-col gap-5" aria-label="Game controls">
@@ -358,7 +378,7 @@ export function PlayView() {
           }}
         />
 
-        <div className="flex flex-col gap-2">
+        <div className="mobile-input-panel hidden flex-col gap-2 sm:flex">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Input</span>
             <button

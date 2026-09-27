@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { CancelledError, useSudokuWorker } from '@/hooks/use-sudoku-worker'
 import { useBoardKeyboard } from '@/hooks/use-board-keyboard'
 import { SIZES, findConflicts, getSizeConfig } from '@/lib/sudoku/config'
-import { NumberPad } from './number-pad'
+import { MobileKeyboardInput, NumberPad } from './number-pad'
 import { Segmented } from './segmented'
 import { StatusLine, type StatusMessage } from './status-line'
 import { SudokuBoard, type CellKind } from './sudoku-board'
@@ -146,6 +146,15 @@ export function SolverView() {
           )}
         </div>
         <StatusLine message={message} />
+        <div className="mobile-only-input" aria-label="Mobile input controls">
+          <div className="mobile-input-heading">
+            <span>Enter clues</span>
+            {selected !== null && <span>Cell {selected + 1}</span>}
+          </div>
+          <div className="mobile-input-row">
+            <MobileKeyboardInput n={n} onInput={setCell} onErase={erase} disabled={busy} />
+          </div>
+        </div>
       </section>
 
       <aside className="flex flex-col gap-5" aria-label="Solver controls">
@@ -157,7 +166,7 @@ export function SolverView() {
           className="[&_[role=radiogroup]]:grid [&_[role=radiogroup]]:grid-cols-3"
         />
 
-        <div className="flex flex-col gap-2">
+        <div className="mobile-input-panel hidden flex-col gap-2 sm:flex">
           <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Enter clues</span>
           <NumberPad n={n} onInput={setCell} onErase={erase} disabled={busy} />
         </div>

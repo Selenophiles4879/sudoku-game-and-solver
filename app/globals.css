@@ -157,3 +157,182 @@
     animation: none;
   }
 }
+
+
+/* Mobile Sudoku controls -------------------------------------------------- */
+.sudoku-number-pad {
+  touch-action: manipulation;
+}
+
+.number-pad-key {
+  min-width: 0;
+  min-height: 42px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 639px) {
+  /* On phones, width is the useful constraint. The old viewport-height
+     calculation could make the board consume the whole screen and push
+     the keypad below the fold. */
+  .sudoku-board {
+    width: min(100%, calc(100vw - 1rem)) !important;
+  }
+
+  /* Keep the input controls available while the user scrolls through the
+     mobile page. The selected cell remains selected while the keypad is
+     brought into view. */
+  .mobile-input-panel {
+    position: sticky;
+    bottom: 0.5rem;
+    z-index: 30;
+    margin-inline: -0.5rem;
+    padding: 0.625rem 0.5rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 0.875rem;
+    background: var(--background);
+    box-shadow: 0 -8px 24px -18px oklch(0.2 0.02 265 / 0.55);
+  }
+
+  .mobile-input-panel .sudoku-number-pad {
+    gap: 0.375rem;
+  }
+
+  .mobile-input-panel .number-pad-key {
+    min-height: 44px;
+    border-radius: 0.625rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .sudoku-board {
+    width: calc(100vw - 0.75rem) !important;
+  }
+
+  .mobile-input-panel .sudoku-number-pad {
+    gap: 0.25rem;
+  }
+
+  .mobile-input-panel .number-pad-key {
+    min-height: 40px;
+    border-radius: 0.5rem;
+  }
+}
+
+/* Native mobile keyboard controls --------------------------------------- */
+.mobile-only-input { display: none; }
+.mobile-keyboard-controls { position: relative; display: flex; flex: 1; min-width: 0; gap: .5rem; }
+.mobile-keyboard-trigger,
+.mobile-keyboard-erase,
+.mobile-notes-button {
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: .75rem;
+  background: var(--card);
+  padding: .55rem .75rem;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--foreground);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.mobile-keyboard-trigger { display: inline-flex; flex: 1; align-items: center; justify-content: center; gap: .4rem; }
+.mobile-keyboard-erase { display: inline-flex; align-items: center; justify-content: center; gap: .35rem; }
+.mobile-notes-button { display: inline-flex; align-items: center; justify-content: center; gap: .35rem; white-space: nowrap; }
+.mobile-notes-button-active { border-color: var(--primary); background: var(--primary); color: var(--primary-foreground); }
+.mobile-keyboard-input { position: absolute; width: 1px; height: 1px; opacity: .01; pointer-events: none; border: 0; padding: 0; }
+
+@media (max-width: 639px) {
+  .sudoku-board { width: min(100%, calc(100vw - 1rem)) !important; }
+  .mobile-only-input {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: .875rem;
+    background: var(--background);
+    padding: .625rem;
+    box-shadow: 0 6px 24px -18px oklch(.2 .02 265 / .55);
+  }
+  .mobile-input-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-bottom: .5rem;
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+  .mobile-input-row { display: flex; align-items: stretch; gap: .5rem; }
+  .mobile-keyboard-controls { width: 100%; }
+  .mobile-keyboard-trigger,
+  .mobile-keyboard-erase,
+  .mobile-notes-button { min-height: 46px; }
+  .mobile-input-panel { position: static !important; margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important; box-shadow: none !important; }
+}
+
+@media (max-width: 380px) {
+  .sudoku-board { width: calc(100vw - .75rem) !important; }
+  .mobile-keyboard-trigger,
+  .mobile-keyboard-erase,
+  .mobile-notes-button { min-height: 44px; padding-inline: .55rem; font-size: .72rem; }
+}
+
+/* Short landscape screens (tablets/phones): width is available, but height
+   is the limiting resource. Use the native keyboard controls instead of
+   placing the full number pad in the side panel. */
+@media (orientation: landscape) and (max-height: 720px) and (pointer: coarse) {
+  .mobile-only-input {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: .875rem;
+    background: var(--background);
+    padding: .5rem;
+    box-shadow: 0 6px 24px -18px oklch(.2 .02 265 / .55);
+  }
+
+  .mobile-input-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-bottom: .4rem;
+    font-size: .65rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .mobile-input-row {
+    display: flex;
+    align-items: stretch;
+    gap: .5rem;
+  }
+
+  .mobile-keyboard-controls {
+    width: 100%;
+  }
+
+  .mobile-keyboard-trigger,
+  .mobile-keyboard-erase,
+  .mobile-notes-button {
+    min-height: 42px;
+  }
+
+  /* The native input is now the compact input method for this viewport. */
+  .mobile-input-panel {
+    display: none !important;
+  }
+
+  /* Give the board more vertical room on short landscape tablets while
+     keeping the compact input controls reachable. */
+  .sudoku-board {
+    width: min(100%, calc(100dvh - 150px)) !important;
+  }
+
+  /* Recover a little more height from the status area in landscape. */
+  .sudoku-board + [role="status"] {
+    min-height: 28px;
+  }
+}

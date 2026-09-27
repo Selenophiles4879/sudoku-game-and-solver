@@ -18,6 +18,19 @@ type BoardProps = {
   dimmed?: boolean
 }
 
+// Smallest a cell is allowed to shrink to before the board switches to a
+// horizontally scrollable, pinch-to-pan layout instead of squeezing every
+// cell into the screen width. Keeps cells tappable on narrow phones even
+// for the bigger grids.
+function minCellPx(n: number) {
+  if (n <= 4) return 64
+  if (n <= 6) return 52
+  if (n <= 9) return 36
+  if (n <= 12) return 30
+  if (n <= 16) return 26
+  return 22
+}
+
 export function SudokuBoard({ cfg, values, kinds, notes, selected, conflicts, flagged, onSelect, dimmed }: BoardProps) {
   const { n } = cfg
   const selRow = selected !== null ? Math.floor(selected / n) : -1
@@ -25,19 +38,25 @@ export function SudokuBoard({ cfg, values, kinds, notes, selected, conflicts, fl
   const selBox = selected !== null ? boxIndex(selRow, selCol, cfg) : -1
   const selValue = selected !== null ? values[selected] : 0
   const noteCols = Math.ceil(Math.sqrt(n))
+  const minPx = minCellPx(n)
 
   const cells = useMemo(() => Array.from({ length: n * n }, (_, i) => i), [n])
 
   return (
-    <div className="w-full overflow-visible pb-1">
+    <div
+      className="sudoku-board-scroll -mx-3 w-[calc(100%+1.5rem)] overflow-x-auto overscroll-x-contain px-3 pb-1 sm:mx-0 sm:w-full sm:overflow-visible sm:px-0"
+      style={{ WebkitOverflowScrolling: 'touch' }}
+    >
       <div
         className={cn(
-          'sudoku-board mx-auto aspect-square w-full max-w-full select-none overflow-hidden rounded-md border-2 border-grid-strong bg-card shadow-[0_1px_0_var(--border),0_12px_32px_-16px_oklch(0.3_0.03_60/0.35)] transition-opacity',
+          'sudoku-board mx-auto aspect-square select-none overflow-hidden rounded-md border-2 border-grid-strong bg-card shadow-[0_1px_0_var(--border),0_12px_32px_-16px_oklch(0.3_0.03_60/0.35)] transition-opacity',
           dimmed && 'opacity-60',
         )}
         style={{
           containerType: 'inline-size',
-          width: `min(100%, calc(100dvh - ${n >= 25 ? 168 : n >= 16 ? 184 : n >= 12 ? 218 : 248}px))`,
+          // Never shrink below a tappable minimum (minPx per cell); grow to
+          // fill available height/width when there's room to spare.
+          width: `max(${n * minPx}px, min(100%, calc(100dvh - ${n >= 25 ? 168 : n >= 16 ? 184 : n >= 12 ? 218 : 248}px)))`,
           display: 'grid',
           gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))`,
           gridTemplateRows: `repeat(${n}, minmax(0, 1fr))`,
@@ -124,7 +143,7 @@ const Cell = memo(function Cell({
       aria-pressed={isSelected}
       onClick={() => onSelect(index)}
       className={cn(
-        'relative flex items-center justify-center leading-none outline-none transition-colors',
+        'relative flex items-center justify-center leading-none outline-none transition-colors active:bg-cell-selected',
         isSelected
           ? 'bg-cell-selected'
           : isSameValue
@@ -139,6 +158,7 @@ const Cell = memo(function Cell({
         borderBottom:
           row === n - 1 ? 'none' : strongBottom ? '2px solid var(--grid-strong)' : '1px solid var(--border)',
         fontSize: `calc(100cqw / ${n} * ${n >= 25 ? 0.58 : n >= 16 ? 0.56 : 0.56})`,
+        touchAction: 'manipulation',
       }}
     >
       {value ? (

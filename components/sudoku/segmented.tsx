@@ -33,11 +33,12 @@ export function Segmented<T extends string | number>({
               aria-checked={active}
               disabled={disabled}
               onClick={() => onChange(opt.value)}
+              style={{ touchAction: 'manipulation' }}
               className={cn(
-                'flex-1 rounded-md px-2.5 py-1.5 text-sm font-medium tabular-nums transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50',
+                'min-h-10 flex-1 rounded-md px-2.5 py-2 text-sm font-medium tabular-nums transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.97] disabled:opacity-50 sm:min-h-0 sm:py-1.5',
                 active
                   ? 'bg-card text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground',
+                  : 'text-muted-foreground hover:text-foreground active:text-foreground',
               )}
             >
               {opt.label}

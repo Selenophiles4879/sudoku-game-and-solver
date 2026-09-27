@@ -17,16 +17,20 @@ export function SudokuApp() {
   const [mode, setMode] = useState<Mode>('play')
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 py-6 sm:px-6 lg:py-10">
-      <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-3 py-4 sm:px-6 sm:py-6 lg:py-10">
+      <header className="mb-5 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-end sm:justify-between sm:gap-5">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">Daily puzzle desk</p>
-          <h1 className="mt-1 font-serif text-4xl font-semibold tracking-tight text-balance sm:text-5xl">Sudoku</h1>
-          <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground text-pretty">
+          <h1 className="mt-1 font-serif text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">Sudoku</h1>
+          <p className="mt-2 hidden max-w-md text-sm leading-relaxed text-muted-foreground text-pretty sm:block">
             Six grid sizes from a gentle 4×4 to a sprawling 25×25. Play a fresh puzzle, or hand one to the solver.
           </p>
         </div>
-        <div role="tablist" aria-label="Mode" className="flex gap-1 self-start rounded-full border bg-card p-1 sm:self-auto">
+        <div
+          role="tablist"
+          aria-label="Mode"
+          className="grid grid-cols-2 gap-1 self-stretch rounded-full border bg-card p-1 sm:flex sm:w-auto sm:self-auto"
+        >
           {MODES.map((m) => (
             <button
               key={m.value}
@@ -36,8 +40,9 @@ export function SudokuApp() {
               aria-selected={mode === m.value}
               aria-controls={`panel-${m.value}`}
               onClick={() => setMode(m.value)}
+              style={{ touchAction: 'manipulation' }}
               className={cn(
-                'rounded-full px-5 py-2 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring',
+                'min-h-11 rounded-full px-5 py-2 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.97] sm:min-h-0',
                 mode === m.value ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground',
               )}
             >
