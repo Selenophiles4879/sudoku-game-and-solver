@@ -1,6 +1,7 @@
 'use client'
 
-import { Activity, useState } from 'react'
+import { Activity, useEffect, useState } from 'react'
+import { Maximize, Minimize } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PlayView } from './play-view'
 import { SolverView } from './solver-view'
@@ -15,6 +16,27 @@ const MODES: { value: Mode; label: string }[] = [
 
 export function SudokuApp() {
   const [mode, setMode] = useState<Mode>('play')
+  const [canFullscreen, setCanFullscreen] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  // Checked after mount so server and client markup match.
+  useEffect(() => {
+    setCanFullscreen(document.fullscreenEnabled === true)
+    const sync = () => setIsFullscreen(document.fullscreenElement !== null)
+    sync()
+    document.addEventListener('fullscreenchange', sync)
+    return () => document.removeEventListener('fullscreenchange', sync)
+  }, [])
+
+  // Must be called from a tap/click — browsers block fullscreen otherwise.
+  const toggleFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen()
+      else await document.documentElement.requestFullscreen()
+    } catch {
+      // Fullscreen refused by the browser; nothing to do.
+    }
+  }
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-3 py-4 sm:px-6 sm:py-6 lg:py-10">
@@ -26,10 +48,11 @@ export function SudokuApp() {
             Six grid sizes from a gentle 4×4 to a sprawling 25×25. Play a fresh puzzle, or hand one to the solver.
           </p>
         </div>
+        <div className="flex items-center gap-2 self-stretch sm:self-auto">
         <div
           role="tablist"
           aria-label="Mode"
-          className="grid grid-cols-2 gap-1 self-stretch rounded-full border bg-card p-1 sm:flex sm:w-auto sm:self-auto"
+          className="grid flex-1 grid-cols-2 gap-1 rounded-full border bg-card p-1 sm:flex sm:w-auto sm:flex-none"
         >
           {MODES.map((m) => (
             <button
@@ -49,6 +72,23 @@ export function SudokuApp() {
               {m.label}
             </button>
           ))}
+        </div>
+        {canFullscreen && (
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Exit full screen' : 'Enter full screen'}
+            title={isFullscreen ? 'Exit full screen' : 'Full screen'}
+            style={{ touchAction: 'manipulation' }}
+            className="flex size-11 shrink-0 items-center justify-center rounded-full border bg-card text-muted-foreground outline-none transition-colors hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.97]"
+          >
+            {isFullscreen ? (
+              <Minimize className="size-4" aria-hidden="true" />
+            ) : (
+              <Maximize className="size-4" aria-hidden="true" />
+            )}
+          </button>
+        )}
         </div>
       </header>
 
